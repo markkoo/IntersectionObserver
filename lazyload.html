@@ -1,0 +1,119 @@
+<html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        img {
+            /* display: block; */
+            /* margin-bottom: 400px; */
+            width: 100px;
+            height: 100px;
+            opacity: 0.1;
+            transition: 2s;
+        }
+
+        img.visible {
+            opacity: 1;
+        }
+
+        .frame {
+            height: 100px;
+            overflow: auto;
+            white-space: nowrap;
+        }
+        .railway{
+            transition: 2s;
+        }
+        #info {
+            position: fixed;
+        }
+
+        #target {
+            position: absolute;
+            top: calc(100vh + 500px);
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="info">我藏在页面底部，请向下滚动</div> -->
+    <!-- <div id="target"></div> -->
+    <button id="button">button</button>
+    <div id="frame" class="frame">
+        <div id="railway" class="railway">
+                <img src="/images/slide1.jpg" alt="">
+                <img src="/images/slide2.jpg" alt="">
+                <img src="/images/slide3.jpg" alt="">
+                <img src="/images/slide4.jpg" alt="">
+                <img src="/images/slide5.jpg" alt="">
+                <img src="/images/slide1.jpg" alt="">
+                <img src="/images/slide2.jpg" alt="">
+                <img src="/images/slide3.jpg" alt="">
+                <img src="/images/slide4.jpg" alt="">
+                <img src="/images/slide5.jpg" alt="">
+                <img src="/images/slide1.jpg" alt="">
+                <img src="/images/slide2.jpg" alt="">
+                <img src="/images/slide3.jpg" alt="">
+                <img src="/images/slide4.jpg" alt="">
+                <img src="/images/slide5.jpg" alt="">
+        </div>
+
+    </div>
+
+    <script src="/node_modules/intersection-observer/intersection-observer.js"></script>
+    <script>
+        // var io = new IntersectionObserver(callback);
+        // io.POLL_INTERVAL = 100; // Time in milliseconds.
+        // io.observe(someTargetElement);
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var lazyBackgrounds = [].slice.call(document.querySelectorAll("img"));
+
+            if ("IntersectionObserver" in window) {
+                let lazyBackgroundObserver = new IntersectionObserver(function (entries, observer) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                            // lazyBackgroundObserver.unobserve(entry.target);
+                            // entry.isIntersecting = false;
+                        } else {
+                            entry.target.classList.remove("visible");
+                        }
+                    });
+                }, {
+                        root: document.getElementById('frame'),
+                        rootMargin: "0px 0px 0px 0px",
+
+                        // threshold: [0, 0.5, 1],
+                    });
+                // lazyBackgroundObserver.POLL_INTERVAL = 100; // Time in milliseconds.
+                // lazyBackgroundObserver.USE_MUTATION_OBSERVER = true;
+               
+                lazyBackgrounds.forEach(function (lazyBackground) {
+                    lazyBackgroundObserver.observe(lazyBackground);
+                });
+
+                console.log(lazyBackgroundObserver)
+
+                setTimeout(()=>{
+                    document.getElementById('railway').style.transform = 'translateX(-500px)';
+                    console.log(lazyBackgroundObserver)
+                    lazyBackgroundObserver._checkForIntersections();
+                },2000)
+            }
+        });
+        // document.getElementById('button').addEventListener('click',()=>{
+        //     // lazyBackgroundObserver.USE_MUTATION_OBSERVER = true;
+        //     document.getElementById('railway').style.transform = 'translateX(-500px)';
+        // });
+    </script>
+</body>
+
+</html>
